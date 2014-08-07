@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<head>
+	<style type="text/css">
+		#drawingCanvas{
+			background: url(cloud.jpg) top 400px left;
+		}
+	</style>
+</head>
+<body>
+<canvas id="drawingCanvas" width="1500" height="340"></canvas>
+<script type="text/javascript">
+		var canvas;
+var context;
+
+window.onload = function() {
+	   // Определение контекста рисования
+	   canvas = document.getElementById("drawingCanvas");
+	   context = canvas.getContext("2d");  
+ 
+	   //setTimeout("drawFrame()", 30);
+	   requestAnimationFrame(drawFrame);
+}
+// Устанавливаем начальную позицию квадрата
+var squarePosition_x = 1500;
+var squarePosition_y = 130;
+var x = 0;
+var y = 50;
+
+function drawFrame() {
+	// Очистить холст
+	context.clearRect(0, 0, canvas.width, canvas.height);
+	
+	// Вызываем метод beginPath(), чтобы убедиться,
+	// что мы не рисуем часть уже нарисованного содержимого холста
+	//context.beginPath();
+	var myImg = new Image();
+		myImg.src = "0_8f9c3_a18c5929_M.png.jpg";
+		context.drawImage(myImg, squarePosition_x, squarePosition_y);
+
+	var myImg1 = new Image();
+		myImg1.src = "cloud-color.png";
+		context.drawImage(myImg1, x, y);
+
+	if(squarePosition_x != -300){
+		squarePosition_x -= 1;
+	}
+	else{
+		squarePosition_x = 1500;
+	}
+	if (x != 1500){
+		x += 1;
+	}
+	else{
+		x = 0;
+	}
+	
+
+	//setTimeout("drawFrame()", 30);
+	requestAnimationFrame(drawFrame);
+}
+</script>
+
+</body>
