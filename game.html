@@ -2,61 +2,118 @@
 <head>
 	<style type="text/css">
 		#drawingCanvas{
-			background: url(cloud.jpg) top 400px left;
+			background: url(Sky.jpg) top 700px left;
 		}
 	</style>
 </head>
 <body>
-<canvas id="drawingCanvas" width="1500" height="340"></canvas>
+<canvas id="drawingCanvas" width="1500" height="640"></canvas>
 <script type="text/javascript">
 		var canvas;
-var context;
+		var context;
+		//global vars
+		var globalID;
+		var plain = {
+			x:1500,
+			y:130
+		}
+		var cloud = {
+			x: 0,
+			y: 50,
+			width: 100,
+			height:100
+		}
+		var tank = {
+			x: 20,
+			y: 500
+		}
+		var pulya = {
+			x:120,
+			y:480,
+			width: 10,
+			height:10
+		}
+
 
 window.onload = function() {
 	   // Определение контекста рисования
 	   canvas = document.getElementById("drawingCanvas");
-	   context = canvas.getContext("2d");  
- 
-	   //setTimeout("drawFrame()", 30);
-	   requestAnimationFrame(drawFrame);
+	   context = canvas.getContext("2d"); 
+	   context.fillStyle = '#F00'; 
+ 		game();
 }
-// Устанавливаем начальную позицию квадрата
-var squarePosition_x = 1500;
-var squarePosition_y = 130;
-var x = 0;
-var y = 50;
+function game(){
+	canvas.fillStyle = "#CC0000";
+	canvas.onclick = function(){
+ 		createPulya();
+ 	};
 
-function drawFrame() {
-	// Очистить холст
+	if (collides(pulya, cloud)){
+       cancelAnimationFrame(globalID);
+       end();
+    }
+
+    else{
+    	update();	
+		draw();
+    }
+	var stop = requestAnimationFrame(game);
+}
+function end(){
 	context.clearRect(0, 0, canvas.width, canvas.height);
-	
-	// Вызываем метод beginPath(), чтобы убедиться,
-	// что мы не рисуем часть уже нарисованного содержимого холста
-	//context.beginPath();
+	var myImg2 = new Image();
+		myImg2.src = "tank.jpg";
+		context.drawImage(myImg2, tank.x, tank.y);
+			cancelAnimationFrame(stop);
+			context.fillText("GAME OVER", 400, 200);
+    		context.font = 'bold 150px sans-serif';
+}
+function draw(){
+	context.clearRect(0, 0, canvas.width, canvas.height);
+	var myImg2 = new Image();
+		myImg2.src = "tank.jpg";
+		context.drawImage(myImg2, tank.x, tank.y);
 	var myImg = new Image();
 		myImg.src = "0_8f9c3_a18c5929_M.png.jpg";
-		context.drawImage(myImg, squarePosition_x, squarePosition_y);
+		context.drawImage(myImg, plain.x, plain.y);
 
 	var myImg1 = new Image();
 		myImg1.src = "cloud-color.png";
-		context.drawImage(myImg1, x, y);
+	context.drawImage(myImg1, cloud.x, cloud.y);
+}
+function update(){
+	if(plain.x != -300){
+		plain.x -= 1;
+	}
+		else{
+			plain.x = 1500;
+		}
 
-	if(squarePosition_x != -300){
-		squarePosition_x -= 1;
+	if (cloud.x != 1500){
+		cloud.x += 1;
+	}
+		else{
+			cloud.x = 0;
+		}
+}
+function createPulya(){
+	if(pulya.y != 0){
+		context.fillRect(pulya.x, pulya.y, 10, 10);
+		pulya.x +=1;
+		pulya.y -= 1;
 	}
 	else{
-		squarePosition_x = 1500;
+		cancelAnimationFrame(globalID);
 	}
-	if (x != 1500){
-		x += 1;
-	}
-	else{
-		x = 0;
-	}
-	
 
-	//setTimeout("drawFrame()", 30);
-	requestAnimationFrame(drawFrame);
+	globalID = requestAnimationFrame(createPulya);
+}
+
+function collides(pulya, plain) {
+  return pulya.x < plain.x + plain.width &&
+         pulya.x + pulya.width > plain.x &&
+         pulya.y < plain.y + plain.height &&
+         pulya.y + pulya.height > plain.y;
 }
 </script>
 
