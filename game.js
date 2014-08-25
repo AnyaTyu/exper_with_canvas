@@ -58,7 +58,7 @@ var context = canvas.getContext("2d");
 //Обьекты игры
 	var player = {
 		x: 20,
-		y: 500,
+		y: 580,
 		width:64,
 		height:64,
   		draw: function() {
