@@ -1,7 +1,7 @@
 $(document).ready(function () {
 	//цикл игры
 	var FPS = 30;
-	setInterval(function() {
+	refreshIntervalId = setInterval(function() {
 		update();
 		draw();
 	}, 1000/FPS);
@@ -61,9 +61,10 @@ var context = canvas.getContext("2d");
 		y: 580,
 		width:64,
 		height:64,
+    src:"tank.jpg",
   		draw: function() {
-  			var myImg2 = new Image();
-			myImg2.src = "tank.jpg";
+  		var myImg2 = new Image();
+			myImg2.src = player.src;
 			context.drawImage(myImg2, player.x, player.y);
   		}
 	};
@@ -84,11 +85,18 @@ player.shoot = function() {
 
 player.midpoint = function() {
   return {
-    x: this.x + this.width,
-    y: this.y + this.height/4
+    x: this.x + this.width/2,
+    y: this.y + this.height/2
   };
 };
 
+player.explode = function() {
+  this.active = false;
+  player.src = "exp.png";
+  clearInterval(refreshIntervalId);
+  $('#drawingCanvas').remove();
+  $('body').append('<div>GAME OVER</div><button onclick="location.reload()">Начать заново</button>')
+};
 function Bullet(I) {
   I.active = true;
 
@@ -124,7 +132,7 @@ function Enemy(I) {
   I.active = true;
   I.age = Math.floor(Math.random() * 128);
 
-  I.color = "#A2B";
+  I.src = "plain.png";
 
   I.x = canvas.width / 4 + Math.random() * canvas.width / 2;
   I.y = 0;
@@ -140,8 +148,8 @@ function Enemy(I) {
   };
 
   I.draw = function() {
-    var myImg1 = new Image();
-	myImg1.src = "plain.png";
+  var myImg1 = new Image();
+	myImg1.src = I.src;
 	context.drawImage(myImg1, this.x, this.y);
   };
 
@@ -157,16 +165,10 @@ function Enemy(I) {
   };
 
   I.explode = function() {
+    I.src = "exp.png"
     this.active = false;
-    // Дополнительно: Добавляем графику для взрыва
   };
-
   return I;
-};
-
-player.explode = function() {
-  this.active = false;
-  // Дополнительно: Добавляем графику для взрыва и заканчиваем игру
 };
 
 function collides(a, b) {
