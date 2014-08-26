@@ -5,8 +5,8 @@ $(document).ready(function () {
 	//цикл игры
 	var FPS = 30;
 	refreshIntervalId = setInterval(function() {
-    draw();
 		update();
+		draw();
 	}, 1000/FPS);
 
 	function update() {
