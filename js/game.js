@@ -6,7 +6,7 @@ $(document).ready(function () {
 	var FPS = 30;
 	refreshIntervalId = setInterval(function() {
 		update();
-		draw();
+    draw();
 	}, 1000/FPS);
 
 	function update() {
@@ -170,6 +170,8 @@ function Enemy(I) {
   I.explode = function() {
     I.src = "exp.png"
     this.active = false;
+    i++;
+    $('#points').html(i);
   };
   return I;
 };
@@ -180,7 +182,7 @@ function collides(a, b) {
          a.y < b.y + b.height &&
          a.y + a.height > b.y;
 }
-
+var i=0;
 function handleCollisions() {
   playerBullets.forEach(function(bullet) {
     enemies.forEach(function(enemy) {
